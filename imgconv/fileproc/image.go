@@ -1,6 +1,7 @@
 package fileproc
 
 import (
+	"bufio"
 	"errors"
 	"image"
 	"image/jpeg"
@@ -56,11 +57,13 @@ func openImage(filepath string, inputFileType string) (image.Image, error) {
 	}
 	defer infd.Close()
 
+	buffered := bufio.NewReader(infd)
+
 	switch inputFileType {
 	case "jpg":
-		return jpeg.Decode(infd)
+		return jpeg.Decode(buffered)
 	case "png":
-		return png.Decode(infd)
+		return png.Decode(buffered)
 	}
 	return nil, errors.New("unsupported file type")
 }
@@ -71,6 +74,10 @@ func writeImage(img image.Image, outputPath string, config options.Options) erro
 	if err != nil {
 		return err
 	}
+	defer ofd.Close()
+
+	buffered := bufio.NewWriter(ofd)
+	defer buffered.Flush()
 
 	switch config.OutputFileType {
 	case "jpg":
@@ -78,7 +85,7 @@ func writeImage(img image.Image, outputPath string, config options.Options) erro
 		err = jpeg.Encode(ofd, img, &options)
 	case "png":
 		encoder := png.Encoder{CompressionLevel: png.CompressionLevel(-config.PNGLevel)}
-		encoder.Encode(ofd, img)
+		encoder.Encode(buffered, img)
 	}
 	if err != nil {
 		return err
