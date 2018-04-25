@@ -49,11 +49,11 @@ func init() {
 func InitOptions() error {
 	flag.Parse()
 	Config.InputDirs = flag.Args()
-	return Config.verify()
+	return Config.Verify()
 }
 
 // Verify option values
-func (o *Options) verify() error {
+func (o *Options) Verify() error {
 
 	switch o.InputFileType {
 	case "png", "jpg":
