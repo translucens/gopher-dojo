@@ -25,11 +25,11 @@ func init() {
 		defaultOverwrite = false
 		usageOverwrite   = "specify overwrite option, when there are same name file(s), then they will be overwritten."
 
-		defaultInputType = "jpeg"
-		usageInputType   = "input filetype (jpeg, png)"
+		defaultInputType = "jpg"
+		usageInputType   = "input filetype (jpg, png)"
 
 		defaultOutputType = "png"
-		usageOutputType   = "output filetype (jpeg, png)"
+		usageOutputType   = "output filetype (jpg, png)"
 
 		defaultJPEGQuality = jpeg.DefaultQuality
 		usageJPEGQuality   = "JPEG quality. 1(smaller)-100(better quality)"

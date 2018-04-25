@@ -1,4 +1,4 @@
-package fileproc
+package dirdigger_test
 
 import (
 	"fmt"
@@ -6,13 +6,16 @@ import (
 	"path/filepath"
 	"sort"
 	"testing"
+
+	"github.com/translucens/gopher-dojo/imgconv/dirdigger"
 )
 
-const separator = filepath.Separator
+const SEPARATOR = string(filepath.Separator)
+const TESTDATA_DIR = ".." + SEPARATOR + "testdata" + SEPARATOR
 
 func TestGenerateJPEGFileList(t *testing.T) {
 
-	actualList, err := GenerateImageFileListFromDirs([]string{"../"}, "jpg")
+	actualList, err := dirdigger.GenerateImageFileListFromDirs([]string{"../"}, "jpg")
 
 	fileinfo, err := os.Stat(".")
 	if err != nil {
@@ -21,9 +24,10 @@ func TestGenerateJPEGFileList(t *testing.T) {
 	fmt.Println(fileinfo.Name())
 
 	expected := []string{
-		fmt.Sprintf("..%ctestimages%cblack16px.jpg", separator, separator),
-		fmt.Sprintf("..%ctestimages%cblack16px-prograssive.jpeg", separator, separator),
-		fmt.Sprintf("..%ctestimages%cwhite32px.JPG", separator, separator)}
+		fmt.Sprintf(TESTDATA_DIR + "black16x32px.jpg"),
+		fmt.Sprintf(TESTDATA_DIR + "black16px-prograssive.jpeg"),
+		fmt.Sprintf(TESTDATA_DIR + "white32px.JPG"),
+		fmt.Sprintf(TESTDATA_DIR + "invalid.jpg")}
 
 	sort.Strings(actualList)
 	sort.Strings(expected)
@@ -49,10 +53,11 @@ func TestGenerateJPEGFileList(t *testing.T) {
 
 func TestGeneratePNGFileList(t *testing.T) {
 
-	actualList, err := GenerateImageFileListFromDirs([]string{"../"}, "png")
+	actualList, err := dirdigger.GenerateImageFileListFromDirs([]string{"../"}, "png")
 	expected := []string{
-		fmt.Sprintf("..%ctestimages%cblack16px.png", separator, separator),
-		fmt.Sprintf("..%ctestimages%cchilddir%cwhite32px.png", separator, separator, separator)}
+		fmt.Sprintf(TESTDATA_DIR + "black16px.png"),
+		fmt.Sprintf(TESTDATA_DIR + "alphach.png"),
+		fmt.Sprintf(TESTDATA_DIR+"childdir%swhite32px.png", SEPARATOR)}
 
 	sort.Strings(actualList)
 	sort.Strings(expected)
@@ -74,4 +79,10 @@ func TestGeneratePNGFileList(t *testing.T) {
 		}
 	}
 
+}
+
+func TestGenerateUnsupportedFileList(t *testing.T) {
+	if _, err := dirdigger.GenerateImageFileListFromDirs([]string{"../"}, "gif"); err == nil {
+		t.Fatalf("GIF should be not supported in this program!")
+	}
 }

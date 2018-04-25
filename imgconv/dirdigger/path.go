@@ -1,4 +1,4 @@
-package fileproc
+package dirdigger
 
 import (
 	"errors"

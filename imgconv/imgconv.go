@@ -3,7 +3,10 @@ package main
 import (
 	"os"
 
-	"github.com/translucens/gopher-dojo/imgconv/fileproc"
+	"go.uber.org/zap"
+
+	"github.com/translucens/gopher-dojo/imgconv/dirdigger"
+	"github.com/translucens/gopher-dojo/imgconv/imageproc"
 	"github.com/translucens/gopher-dojo/imgconv/options"
 )
 
@@ -14,12 +17,12 @@ func main() {
 		errorHandler(optionError.Error())
 	}
 
-	filelist, err := fileproc.GenerateImageFileListFromDirs(options.Config.InputDirs, options.Config.InputFileType)
+	filelist, err := dirdigger.GenerateImageFileListFromDirs(options.Config.InputDirs, options.Config.InputFileType)
 	if err != nil {
 		errorHandler(err.Error())
 	}
 
-	err = fileproc.ConvertImages(filelist, options.Config)
+	err = imageproc.ConvertImages(filelist, options.Config)
 	if err != nil {
 		errorHandler(err.Error())
 	}
@@ -27,7 +30,9 @@ func main() {
 }
 
 func errorHandler(err string) {
-	os.Stderr.WriteString(err)
-	os.Stderr.WriteString("\n")
+	logger, _ := zap.NewProduction()
+	defer logger.Sync()
+	sugar := logger.Sugar()
+	sugar.Errorf("%s\n", err)
 	os.Exit(1)
 }
