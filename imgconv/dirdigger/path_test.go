@@ -10,8 +10,8 @@ import (
 	"github.com/translucens/gopher-dojo/imgconv/dirdigger"
 )
 
-const SEPARATOR = string(filepath.Separator)
-const TESTDATA_DIR = ".." + SEPARATOR + "testdata" + SEPARATOR
+const Separator = string(filepath.Separator)
+const TestdataDir = ".." + Separator + "testdata" + Separator
 
 func TestGenerateJPEGFileList(t *testing.T) {
 
@@ -24,10 +24,10 @@ func TestGenerateJPEGFileList(t *testing.T) {
 	fmt.Println(fileinfo.Name())
 
 	expected := []string{
-		fmt.Sprintf(TESTDATA_DIR + "black16x32px.jpg"),
-		fmt.Sprintf(TESTDATA_DIR + "black16px-prograssive.jpeg"),
-		fmt.Sprintf(TESTDATA_DIR + "white32px.JPG"),
-		fmt.Sprintf(TESTDATA_DIR + "invalid.jpg")}
+		fmt.Sprintf(TestdataDir + "black16x32px.jpg"),
+		fmt.Sprintf(TestdataDir + "black16px-prograssive.jpeg"),
+		fmt.Sprintf(TestdataDir + "white32px.JPG"),
+		fmt.Sprintf(TestdataDir + "invalid.jpg")}
 
 	sort.Strings(actualList)
 	sort.Strings(expected)
@@ -55,9 +55,9 @@ func TestGeneratePNGFileList(t *testing.T) {
 
 	actualList, err := dirdigger.GenerateImageFileListFromDirs([]string{"../"}, "png")
 	expected := []string{
-		fmt.Sprintf(TESTDATA_DIR + "black16px.png"),
-		fmt.Sprintf(TESTDATA_DIR + "alphach.png"),
-		fmt.Sprintf(TESTDATA_DIR+"childdir%swhite32px.png", SEPARATOR)}
+		fmt.Sprintf(TestdataDir + "black16px.png"),
+		fmt.Sprintf(TestdataDir + "alphach.png"),
+		fmt.Sprintf(TestdataDir+"childdir%swhite32px.png", Separator)}
 
 	sort.Strings(actualList)
 	sort.Strings(expected)

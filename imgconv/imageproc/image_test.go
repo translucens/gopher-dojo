@@ -11,8 +11,8 @@ import (
 	"github.com/translucens/gopher-dojo/imgconv/options"
 )
 
-const SEPARATOR = string(filepath.Separator)
-const TESTDATA_DIR = ".." + SEPARATOR + "testdata" + SEPARATOR
+const Separator = string(filepath.Separator)
+const TestdataDir = ".." + Separator + "testdata" + Separator
 
 // TestHelper: check image width, height
 func imageWidthHeightIs(t *testing.T, img image.Image, width int, height int) {
@@ -55,12 +55,12 @@ type TestImageProperty struct {
 
 func TestLoadImages(t *testing.T) {
 	cases := []TestImageProperty{
-		{filepath: TESTDATA_DIR + "black16x32px.jpg", filetype: "jpg", width: 16, height: 32, cornercolor: color.NRGBA{0, 0, 0, 0}},
-		{filepath: TESTDATA_DIR + "black16px-prograssive.jpeg", filetype: "jpg", width: 16, height: 16, cornercolor: color.NRGBA{0, 0, 0, 0}},
-		{filepath: TESTDATA_DIR + "black16px.png", filetype: "png", width: 16, height: 16, cornercolor: color.NRGBA{0, 0, 0, 0}},
-		{filepath: TESTDATA_DIR + "white32px.JPG", filetype: "jpg", width: 32, height: 32, cornercolor: color.NRGBA{255, 255, 255, 255}},
-		{filepath: TESTDATA_DIR + "childdir" + SEPARATOR + "white32px.png", filetype: "png", width: 32, height: 32, cornercolor: color.NRGBA{255, 255, 255, 255}},
-		{filepath: TESTDATA_DIR + SEPARATOR + "alphach.png", filetype: "png", width: 16, height: 16, cornercolor: color.NRGBA{255, 0, 0, 255}}}
+		{filepath: TestdataDir + "black16x32px.jpg", filetype: "jpg", width: 16, height: 32, cornercolor: color.NRGBA{0, 0, 0, 0}},
+		{filepath: TestdataDir + "black16px-prograssive.jpeg", filetype: "jpg", width: 16, height: 16, cornercolor: color.NRGBA{0, 0, 0, 0}},
+		{filepath: TestdataDir + "black16px.png", filetype: "png", width: 16, height: 16, cornercolor: color.NRGBA{0, 0, 0, 0}},
+		{filepath: TestdataDir + "white32px.JPG", filetype: "jpg", width: 32, height: 32, cornercolor: color.NRGBA{255, 255, 255, 255}},
+		{filepath: TestdataDir + "childdir" + Separator + "white32px.png", filetype: "png", width: 32, height: 32, cornercolor: color.NRGBA{255, 255, 255, 255}},
+		{filepath: TestdataDir + Separator + "alphach.png", filetype: "png", width: 16, height: 16, cornercolor: color.NRGBA{255, 0, 0, 255}}}
 
 	for _, c := range cases {
 		img, err := imageproc.OpenImageFile(c.filepath, c.filetype)
@@ -73,7 +73,7 @@ func TestLoadImages(t *testing.T) {
 }
 
 func TestLoadAlphaChPNGFile(t *testing.T) {
-	img, err := imageproc.OpenImageFile(TESTDATA_DIR+"alphach.png", "png")
+	img, err := imageproc.OpenImageFile(TestdataDir+"alphach.png", "png")
 	if err != nil {
 		t.Fatalf("Open file error: %s", err.Error())
 	}
@@ -84,7 +84,7 @@ func TestLoadAlphaChPNGFile(t *testing.T) {
 }
 
 func TestBrokenFile(t *testing.T) {
-	_, err := imageproc.OpenImageFile(TESTDATA_DIR+"invalid.jpg", "jpg")
+	_, err := imageproc.OpenImageFile(TestdataDir+"invalid.jpg", "jpg")
 	if err == nil {
 		t.Fatalf("This file should be broken!")
 	}
@@ -92,18 +92,18 @@ func TestBrokenFile(t *testing.T) {
 }
 
 func TestConvertJPEG2PNG(t *testing.T) {
-	if err := imageproc.ConvertImage(TESTDATA_DIR+"black16x32px.jpg", options.Options{Overwrite: true, PNGLevel: int(png.DefaultCompression), InputFileType: "jpg", OutputFileType: "png"}); err != nil {
+	if err := imageproc.ConvertImage(TestdataDir+"black16x32px.jpg", options.Options{Overwrite: true, PNGLevel: int(png.DefaultCompression), InputFileType: "jpg", OutputFileType: "png"}); err != nil {
 		t.Fatalf("convert failed %s", err.Error())
 	}
 
 	// skip if destination file already exists
-	if err := imageproc.ConvertImage(TESTDATA_DIR+"black16x32px.jpg", options.Options{Overwrite: false, PNGLevel: int(png.DefaultCompression), InputFileType: "jpg", OutputFileType: "png"}); err != nil {
+	if err := imageproc.ConvertImage(TestdataDir+"black16x32px.jpg", options.Options{Overwrite: false, PNGLevel: int(png.DefaultCompression), InputFileType: "jpg", OutputFileType: "png"}); err != nil {
 		t.Fatalf("convert failed %s", err.Error())
 	}
 }
 
 func TestConvertPNG2JPEG(t *testing.T) {
-	if err := imageproc.ConvertImages([]string{TESTDATA_DIR + "alphach.png"}, options.Options{Overwrite: true, JPEGQuality: 100, InputFileType: "png", OutputFileType: "jpg"}); err != nil {
+	if err := imageproc.ConvertImages([]string{TestdataDir + "alphach.png"}, options.Options{Overwrite: true, JPEGQuality: 100, InputFileType: "png", OutputFileType: "jpg"}); err != nil {
 		t.Fatalf("convert failed %s", err.Error())
 	}
 }

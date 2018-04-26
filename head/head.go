@@ -71,6 +71,7 @@ func main() {
 	}
 }
 
+// GetHead returns first N lines from file
 func GetHead(fd *os.File, lines int) ([]string, error) {
 
 	scanner := bufio.NewScanner(fd)
@@ -83,6 +84,7 @@ func GetHead(fd *os.File, lines int) ([]string, error) {
 	return buffer, scanner.Err()
 }
 
+// GetTail returns last N lines from file
 func GetTail(fd *os.File, lines int) ([]string, error) {
 	scanner := bufio.NewScanner(fd)
 	buffer := make([]string, lines)
